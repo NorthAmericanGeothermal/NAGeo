@@ -20,7 +20,7 @@
   <script>
     let pdfData = [];
     
-    // Load the JSON metadata file; ensure pdfs.json is in the repository root (or adjust the path if needed)
+    // Load the JSON metadata file
     fetch('pdfs.json')
       .then(response => response.json())
       .then(data => {
@@ -52,15 +52,16 @@
          const record = results[0];
          resultDiv.innerHTML = `<p>Found: ${record.fileName}</p>
                                 <p><a href="${record.url}" target="_blank">Open your Service Agreement</a></p>`;
-         // Append payment instructions after a successful match.
-         resultDiv.innerHTML += `<div class="payment-info">
-                                  <p>To pay, please visit our website at 
-                                  <a href="https://www.northamericangeo.com" target="_blank">www.northamericangeo.com</a>.</p>
-                                  <p>On our main page, at the very top and center of the banner, you'll see a button labeled "Submit" or "Pay your invoice." Click that button to complete your payment.</p>
-                                  </div>`;
       } else {
          resultDiv.innerHTML = `<p>Multiple records found. Please refine your search.</p>`;
       }
+      
+      // Append the payment instructions regardless of match count.
+      resultDiv.innerHTML += `<div class="payment-info">
+                                  <p>To pay, please visit our website at 
+                                  <a href="https://www.northamericangeo.com" target="_blank">www.northamericangeo.com</a>.</p>
+                                  <p>On our main page, at the very top and center of the banner, you'll see a button labeled "Submit" or "Pay your invoice." Click that button to complete your payment.</p>
+                               </div>`;
     }
   </script>
 </body>
