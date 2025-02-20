@@ -6,6 +6,7 @@
   <style>
     body { font-family: Arial, sans-serif; margin: 20px; }
     .result { margin-top: 20px; }
+    .payment-info { margin-top: 20px; font-size: 14px; color: #333; }
   </style>
 </head>
 <body>
@@ -51,6 +52,12 @@
          const record = results[0];
          resultDiv.innerHTML = `<p>Found: ${record.fileName}</p>
                                 <p><a href="${record.url}" target="_blank">Open your Service Agreement</a></p>`;
+         // Append payment instructions after a successful match.
+         resultDiv.innerHTML += `<div class="payment-info">
+                                  <p>To pay, please visit our website at 
+                                  <a href="https://www.northamericangeo.com" target="_blank">www.northamericangeo.com</a>.</p>
+                                  <p>On our main page, at the very top and center of the banner, you'll see a button labeled "Submit" or "Pay your invoice." Click that button to complete your payment.</p>
+                                  </div>`;
       } else {
          resultDiv.innerHTML = `<p>Multiple records found. Please refine your search.</p>`;
       }
