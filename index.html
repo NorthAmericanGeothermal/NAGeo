@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Service Agreement Lookup</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    .result { margin-top: 20px; }
+    .payment-info { margin-top: 20px; font-size: 14px; color: #333; }
+  </style>
+</head>
+<body>
+  <h1>Service Agreement Lookup</h1>
+  <p>Enter your Customer ID, your first or last name, or your address to access your service agreement.</p>
+  <input type="text" id="searchInput" placeholder="Enter your identifier">
+  <button onclick="searchPDF()">Search</button>
+  
+  <div id="result" class="result"></div>
+  
+  <script>
+    let pdfData = [];
+    
+    // Load the JSON metadata file
+    fetch('pdfs.json')
+      .then(response => response.json())
+      .then(data => {
+         pdfData = data;
+      })
+      .catch(err => console.error("Error loading JSON data:", err));
+    
+    function searchPDF() {
+      const query = document.getElementById('searchInput').value.trim().toLowerCase();
+      const resultDiv = document.getElementById('result');
+      resultDiv.innerHTML = '';
+      
+      if (!query) {
+         resultDiv.innerHTML = '<p>Please enter an identifier.</p>';
+         return;
+      }
+      
+      // Filter records by matching any of the identifiers: customerID, firstName, lastName, or address.
+      const results = pdfData.filter(item =>
+          item.customerID.toLowerCase().includes(query) ||
+          item.firstName.toLowerCase().includes(query) ||
+          item.lastName.toLowerCase().includes(query) ||
+          item.address.toLowerCase().includes(query)
+      );
+      
+      if (results.length === 0) {
+         resultDiv.innerHTML = '<p>No matching record found. Please check your identifier and try again.</p>';
+      } else if (results.length === 1) {
+         const record = results[0];
+         resultDiv.innerHTML = `<p>Found: ${record.fileName}</p>
+                                <p><a href="${record.url}" target="_blank">Open your Service Agreement</a></p>`;
+      } else {
+         resultDiv.innerHTML = `<p>Multiple records found. Please refine your search.</p>`;
+      }
+      
+      // Append the payment instructions regardless of match count.
+      resultDiv.innerHTML += `<div class="payment-info">
+                                  <p>To pay, please visit our website at 
+                                  <a href="https://www.northamericangeo.com" target="_blank">www.northamericangeo.com</a>.</p>
+                                  <p>On our main page, at the very top and center of the banner, you'll see a button labeled "Submit" or "Pay your invoice." Click that button to complete your payment.</p>
+                               </div>`;
+    }
+  </script>
+</body>
+</html>
